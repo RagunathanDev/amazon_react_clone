@@ -1,0 +1,15 @@
+.Header__Container {
+  display: flex;
+  width: auto;
+  height: 3rem;
+  background-color: #131921;
+}
+.Header__ProductImg {
+  display: flex;
+  margin: 10px 10px;
+}
+
+.ProductImage {
+  width: auto;
+  height: auto;
+}
