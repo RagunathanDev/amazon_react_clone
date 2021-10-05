@@ -4,11 +4,27 @@ import SignUp from "./Screens/signup/SignUp";
 import styled from "styled-components";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import SignIn from "./Screens/signin/SignIn";
+//react router's
+import { Switch, Link, Route } from "react-router-dom";
+import Home from "./Screens/Home/Home";
+import TimeOut from "./Screens/SessionTimeOut/TimeOut";
 
 function App() {
   return (
     <Container>
-      <SignUp />
+      <Switch>
+        <Route exact path="/SignIn">
+          <SignIn />
+        </Route>
+        <Route exact path="/SignUp" component={SignUp} />
+        <Route exact path="/Home" component={Home} />
+        <Route exact path="/Home" component={TimeOut} />
+        <Route exact path="/">
+          <SignIn />
+        </Route>
+      </Switch>
+
       <StyledToastContainer theme="dark" />
     </Container>
   );

@@ -1,70 +1,84 @@
 import React from "react";
+
+import { Link } from "react-router-dom";
 import styled from "styled-components";
-import {
-  collection,
-  addDoc,
-  getDoc,
-  setDoc,
-  doc,
-  getDocs,
-} from "firebase/firestore";
-import { db } from "../../firebase/firebaseConfig";
-import { userRef } from "../../firebase/firebaseCollectionRef";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { toast } from "react-toastify";
+import { auth } from "../../firebase/firebaseConfig";
 import { useHistory } from "react-router-dom";
-function SignUp() {
+
+function SignIn() {
+  //Authenticate user details
   const history = useHistory();
 
   const initialValue = {
-    email: {
-      value: "",
-    },
-    password: {
-      value: "",
-    },
-    confirmPassword: {
-      value: "",
-    },
+    email: "",
+    password: "",
   };
 
   const [user, setUser] = React.useState(initialValue);
 
-  //add user to firestore
-  const addUser = async () => {
-    try {
-      const docRef = await setDoc(doc(db, "users", user.email.value), {
-        userDetails: user,
-      });
-      setUser(initialValue);
-      toast("SignIn Successfully", {
-        position: "bottom-center",
-        pauseOnFocusLoss: true,
-        autoClose: 1500,
-        type: toast.TYPE.INFO,
-      });
+  const authUserDetails = async () => {
+    if (validateUser()) {
+      try {
+        const userCredentials = await signInWithEmailAndPassword(
+          auth,
+          user?.email,
+          user?.password
+        );
 
-      console.log(await getDoc(doc(db, "")));
-    } catch (error) {
-      console.error("error occured while saveing user to firestore", error);
+        if (userCredentials.user) {
+          console.log(userCredentials.user);
+          history.push({
+            pathname: "/Home",
+            user: userCredentials.user,
+          });
+        }
+        console.log(userCredentials.user);
+      } catch (error) {
+        console.error("Error while user signin", error);
+        toast.error(error.message);
+        error?.message.includes("user-not-found") && history.push("/SignUp");
+        error?.message.includes("wrong-password") &&
+          setUser({ ...user, password: "" });
+      }
     }
   };
 
-  const validateUser = (validation, value) => {
-    if (validation === "email") {
-      const cValue = value.includes("@") ? "green" : "red";
-
-      //setUser({ ...user, email: { ...user.email, color: cValue } });
+  const validateUser = () => {
+    if (user.email !== "" || user.password !== "") {
+      if (
+        !(
+          user.email.includes("@") &&
+          user.email.includes(".com") &&
+          user.email.length > 10
+        )
+      ) {
+        toast.error("Enter valid Mail ID.", {
+          autoClose: 2000,
+        });
+        return false;
+      } else if (!(user.password.length >= 8 && user.password.length < 30)) {
+        user.password.length < 8
+          ? toast.error("Password length min : 8 ")
+          : toast.error("Password length max : 30 ");
+        return false;
+      }
+    } else {
+      toast.error("Please provide email / password");
+      return false;
     }
+    return true;
   };
 
   return (
-    <Container>
+    <SigninContainer>
       <TitleContainer>
         <HeadingDiv>
-          <Heading main>SignUp</Heading>
+          <Heading main>SignIn</Heading>
         </HeadingDiv>
         <SignUpHeading>
-          <Heading onClick={() => history.push("/SignIn")}>SignIn ▶</Heading>
+          <Heading onClick={() => history.push("/SignUp")}>SignUp ◀</Heading>
         </SignUpHeading>
       </TitleContainer>
       <Spliter />
@@ -75,13 +89,12 @@ function SignUp() {
             borderColor={user.email.color}
             type="email"
             id="email-input"
-            value={user.email.value}
+            value={user.email}
             onChange={(e) => {
               setUser({
                 ...user,
-                email: { ...user.email, value: e.target.value },
+                email: e.target.value,
               });
-              validateUser("email", e.target.value);
             }}
           />
         </EmailContainer>
@@ -91,29 +104,12 @@ function SignUp() {
             borderColor={user.password.color}
             type="password"
             id="password-input"
-            value={user.password.value}
+            value={user.password}
+            min={8}
             onChange={(e) =>
               setUser({
                 ...user,
-                password: { ...user.password, value: e.target.value },
-              })
-            }
-          />
-        </PasswordContainer>
-        <PasswordContainer>
-          <Label htmlFor="confirm-password-input">Confirm Password</Label>
-          <Input
-            borderColor={user.confirmPassword.color}
-            type="password"
-            id="confirm-password-input"
-            value={user.confirmPassword.value}
-            onChange={(e) =>
-              setUser({
-                ...user,
-                confirmPassword: {
-                  ...user.confirmPassword,
-                  value: e.target.value,
-                },
+                password: e.target.value,
               })
             }
           />
@@ -121,19 +117,25 @@ function SignUp() {
       </LoginContainer>
 
       <ButtonContainer>
-        <Button type="button" value="Submit" onClick={addUser} />
+        <Button type="button" value="Submit" onClick={authUserDetails} />
 
         <Button cancel type="button" value="Cancel" />
       </ButtonContainer>
-    </Container>
+
+      <ButtonContainer>
+        <Link to="/SignUp">
+          <SignUpNavigate>don't have account, please signup</SignUpNavigate>
+        </Link>
+      </ButtonContainer>
+    </SigninContainer>
   );
 }
 
-export default SignUp;
+export default SignIn;
 
 // styleing the components using STYLED-COMPONENT
 
-const Container = styled.div`
+const SigninContainer = styled.div`
   width: auto;
   height: auto;
   border: 2px solid #66b5ff;
@@ -217,11 +219,15 @@ const Error = styled.label`
   align-items: center;
 `;
 
+const SignUpNavigate = styled.p`
+  font-size: 10px;
+  color: #802a2a;
+`;
+
 const TitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin: 0px 5px;
 `;
 
 const SignUpHeading = styled.div`
