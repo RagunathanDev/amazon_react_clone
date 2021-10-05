@@ -1,5 +1,5 @@
 import Header from "./header/Header";
-import SignUp from "./Screens/signin/SignUp";
+import SignUp from "./Screens/signup/SignUp";
 
 import styled from "styled-components";
 import "react-toastify/dist/ReactToastify.css";
@@ -41,7 +41,7 @@ const StyledToastContainer = styled(ToastContainer).attrs({
     background-color: var(--color-black);
     color: black;
     font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-    font-size: medium;
+    font-size: small;
   }
 
   button[aria-label="close"] {

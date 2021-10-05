@@ -11,4 +11,6 @@ function Header() {
   );
 }
 
-export default Header;
+function name(a, b) {
+  return a + b;
+}

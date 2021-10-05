@@ -30,15 +30,18 @@ function SignUp() {
   //add user to firestore
   const addUser = async () => {
     try {
-      // const docRef = await setDoc(doc(db, "users", user.email.value), {
-      //   userDetails: user,
-      // });
-      // setUser(initialValue);
+      const docRef = await setDoc(doc(db, "users", user.email.value), {
+        userDetails: user,
+      });
+      setUser(initialValue);
       toast("SignIn Successfully", {
         position: "bottom-center",
         pauseOnFocusLoss: true,
         autoClose: 1500,
+        type: toast.TYPE.INFO,
       });
+
+      console.log(await getDoc(doc(db, "")));
     } catch (error) {
       console.error("error occured while saveing user to firestore", error);
     }

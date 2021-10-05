@@ -16,4 +16,4 @@ const app = initializeApp(Config);
 
 const db = getFirestore();
 
-export { app, db };
+export { db };
