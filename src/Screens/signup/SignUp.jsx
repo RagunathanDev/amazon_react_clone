@@ -12,25 +12,21 @@ import { db } from "../../firebase/firebaseConfig";
 import { userRef } from "../../firebase/firebaseCollectionRef";
 import { toast } from "react-toastify";
 import { useHistory } from "react-router-dom";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+
 function SignUp() {
   const history = useHistory();
 
   const initialValue = {
-    email: {
-      value: "",
-    },
-    password: {
-      value: "",
-    },
-    confirmPassword: {
-      value: "",
-    },
+    email: "",
+    password: "",
+    confirmPassword: "",
   };
 
   const [user, setUser] = React.useState(initialValue);
 
   //add user to firestore
-  const addUser = async () => {
+  const addUserToFireStore = async () => {
     try {
       const docRef = await setDoc(doc(db, "users", user.email.value), {
         userDetails: user,
@@ -49,12 +45,59 @@ function SignUp() {
     }
   };
 
-  const validateUser = (validation, value) => {
-    if (validation === "email") {
-      const cValue = value.includes("@") ? "green" : "red";
-
-      //setUser({ ...user, email: { ...user.email, color: cValue } });
+  //Add User to Firebase Authentication
+  const addUser = async () => {
+    try {
+      if (validateUser()) {
+        const auth = getAuth();
+        console.log(user);
+        const userDetails = await createUserWithEmailAndPassword(
+          auth,
+          user.email,
+          user.password
+        );
+        console.log(userDetails);
+        userDetails.user && toast.info("SignUp Successfully");
+        history.push({
+          pathname: "/Home",
+          user: userDetails.user,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
     }
+  };
+
+  const validateUser = () => {
+    if (
+      user.email !== "" ||
+      user.password !== "" ||
+      user.confirmPassword !== ""
+    ) {
+      if (
+        !(
+          user.email.includes("@") &&
+          user.email.includes(".com") &&
+          user.email.length > 10
+        )
+      ) {
+        toast.error("Enter valid Mail ID.");
+        return false;
+      } else if (!(user.password.length >= 8 && user.password.length < 30)) {
+        user.password.length < 8
+          ? toast.error("Password length min : 8 ")
+          : toast.error("Password length max : 30 ");
+        return false;
+      } else if (!(user.password === user.confirmPassword)) {
+        toast.error("Password mismatch ");
+        return false;
+      }
+    } else {
+      toast.error("Enter valid details");
+      return false;
+    }
+    return true;
   };
 
   return (
@@ -75,13 +118,12 @@ function SignUp() {
             borderColor={user.email.color}
             type="email"
             id="email-input"
-            value={user.email.value}
+            value={user.email}
             onChange={(e) => {
               setUser({
                 ...user,
-                email: { ...user.email, value: e.target.value },
+                email: e.target.value,
               });
-              validateUser("email", e.target.value);
             }}
           />
         </EmailContainer>
@@ -91,11 +133,11 @@ function SignUp() {
             borderColor={user.password.color}
             type="password"
             id="password-input"
-            value={user.password.value}
+            value={user.password}
             onChange={(e) =>
               setUser({
                 ...user,
-                password: { ...user.password, value: e.target.value },
+                password: e.target.value,
               })
             }
           />
@@ -106,14 +148,11 @@ function SignUp() {
             borderColor={user.confirmPassword.color}
             type="password"
             id="confirm-password-input"
-            value={user.confirmPassword.value}
+            value={user.confirmPassword}
             onChange={(e) =>
               setUser({
                 ...user,
-                confirmPassword: {
-                  ...user.confirmPassword,
-                  value: e.target.value,
-                },
+                confirmPassword: e.target.value,
               })
             }
           />

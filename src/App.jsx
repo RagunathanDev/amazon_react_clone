@@ -2,11 +2,11 @@ import Header from "./header/Header";
 import SignUp from "./Screens/signup/SignUp";
 
 import styled from "styled-components";
-import "react-toastify/dist/ReactToastify.css";
+import "react-toastify/dist/ReactToastify.min.css";
 import { ToastContainer } from "react-toastify";
 import SignIn from "./Screens/signin/SignIn";
 //react router's
-import { Switch, Link, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import Home from "./Screens/Home/Home";
 import TimeOut from "./Screens/SessionTimeOut/TimeOut";
 
@@ -19,13 +19,13 @@ function App() {
         </Route>
         <Route exact path="/SignUp" component={SignUp} />
         <Route exact path="/Home" component={Home} />
-        <Route exact path="/Home" component={TimeOut} />
+        <Route exact path="/TimeOut" component={TimeOut} />
         <Route exact path="/">
           <SignIn />
         </Route>
       </Switch>
 
-      <StyledToastContainer theme="dark" />
+      <StyledToastContainer autoClose={1800} theme="dark" />
     </Container>
   );
 }
