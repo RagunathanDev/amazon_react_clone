@@ -33,9 +33,6 @@ function App() {
 export default App;
 
 const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background-color: #c0d9f0;
 `;
 

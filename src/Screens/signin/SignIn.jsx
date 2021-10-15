@@ -72,68 +72,76 @@ function SignIn() {
   };
 
   return (
-    <SigninContainer>
-      <TitleContainer>
-        <HeadingDiv>
-          <Heading main>SignIn</Heading>
-        </HeadingDiv>
-        <SignUpHeading>
-          <Heading onClick={() => history.push("/SignUp")}>SignUp ◀</Heading>
-        </SignUpHeading>
-      </TitleContainer>
-      <Spliter />
-      <LoginContainer>
-        <EmailContainer>
-          <Label htmlFor="email-input">Email</Label>
-          <Input
-            borderColor={user.email.color}
-            type="email"
-            id="email-input"
-            value={user.email}
-            onChange={(e) => {
-              setUser({
-                ...user,
-                email: e.target.value,
-              });
-            }}
-          />
-        </EmailContainer>
-        <PasswordContainer>
-          <Label htmlFor="password-input">Password</Label>
-          <Input
-            borderColor={user.password.color}
-            type="password"
-            id="password-input"
-            value={user.password}
-            min={8}
-            onChange={(e) =>
-              setUser({
-                ...user,
-                password: e.target.value,
-              })
-            }
-          />
-        </PasswordContainer>
-      </LoginContainer>
+    <Container>
+      <SigninContainer>
+        <TitleContainer>
+          <HeadingDiv>
+            <Heading main>SignIn</Heading>
+          </HeadingDiv>
+          <SignUpHeading>
+            <Heading onClick={() => history.push("/SignUp")}>SignUp ◀</Heading>
+          </SignUpHeading>
+        </TitleContainer>
+        <Spliter />
+        <LoginContainer>
+          <EmailContainer>
+            <Label htmlFor="email-input">Email</Label>
+            <Input
+              borderColor={user.email.color}
+              type="email"
+              id="email-input"
+              value={user.email}
+              onChange={(e) => {
+                setUser({
+                  ...user,
+                  email: e.target.value,
+                });
+              }}
+            />
+          </EmailContainer>
+          <PasswordContainer>
+            <Label htmlFor="password-input">Password</Label>
+            <Input
+              borderColor={user.password.color}
+              type="password"
+              id="password-input"
+              value={user.password}
+              min={8}
+              onChange={(e) =>
+                setUser({
+                  ...user,
+                  password: e.target.value,
+                })
+              }
+            />
+          </PasswordContainer>
+        </LoginContainer>
 
-      <ButtonContainer>
-        <Button type="button" value="Submit" onClick={authUserDetails} />
+        <ButtonContainer>
+          <Button type="button" value="Submit" onClick={authUserDetails} />
 
-        <Button cancel type="button" value="Cancel" />
-      </ButtonContainer>
+          <Button cancel type="button" value="Cancel" />
+        </ButtonContainer>
 
-      <ButtonContainer>
-        <Link to="/SignUp">
-          <SignUpNavigate>don't have account, please signup</SignUpNavigate>
-        </Link>
-      </ButtonContainer>
-    </SigninContainer>
+        <ButtonContainer>
+          <Link to="/SignUp">
+            <SignUpNavigate>don't have account, please signup</SignUpNavigate>
+          </Link>
+        </ButtonContainer>
+      </SigninContainer>
+    </Container>
   );
 }
 
 export default SignIn;
 
 // styleing the components using STYLED-COMPONENT
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const SigninContainer = styled.div`
   width: auto;

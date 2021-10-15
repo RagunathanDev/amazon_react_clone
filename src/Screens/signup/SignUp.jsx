@@ -102,68 +102,70 @@ function SignUp() {
 
   return (
     <Container>
-      <TitleContainer>
-        <HeadingDiv>
-          <Heading main>SignUp</Heading>
-        </HeadingDiv>
-        <SignUpHeading>
-          <Heading onClick={() => history.push("/SignIn")}>SignIn ▶</Heading>
-        </SignUpHeading>
-      </TitleContainer>
-      <Spliter />
-      <LoginContainer>
-        <EmailContainer>
-          <Label htmlFor="email-input">Email</Label>
-          <Input
-            borderColor={user.email.color}
-            type="email"
-            id="email-input"
-            value={user.email}
-            onChange={(e) => {
-              setUser({
-                ...user,
-                email: e.target.value,
-              });
-            }}
-          />
-        </EmailContainer>
-        <PasswordContainer>
-          <Label htmlFor="password-input">Password</Label>
-          <Input
-            borderColor={user.password.color}
-            type="password"
-            id="password-input"
-            value={user.password}
-            onChange={(e) =>
-              setUser({
-                ...user,
-                password: e.target.value,
-              })
-            }
-          />
-        </PasswordContainer>
-        <PasswordContainer>
-          <Label htmlFor="confirm-password-input">Confirm Password</Label>
-          <Input
-            borderColor={user.confirmPassword.color}
-            type="password"
-            id="confirm-password-input"
-            value={user.confirmPassword}
-            onChange={(e) =>
-              setUser({
-                ...user,
-                confirmPassword: e.target.value,
-              })
-            }
-          />
-        </PasswordContainer>
-      </LoginContainer>
+      <SignUpContainer>
+        <TitleContainer>
+          <HeadingDiv>
+            <Heading main>SignUp</Heading>
+          </HeadingDiv>
+          <SignUpHeading>
+            <Heading onClick={() => history.push("/SignIn")}>SignIn ▶</Heading>
+          </SignUpHeading>
+        </TitleContainer>
+        <Spliter />
+        <LoginContainer>
+          <EmailContainer>
+            <Label htmlFor="email-input">Email</Label>
+            <Input
+              borderColor={user.email.color}
+              type="email"
+              id="email-input"
+              value={user.email}
+              onChange={(e) => {
+                setUser({
+                  ...user,
+                  email: e.target.value,
+                });
+              }}
+            />
+          </EmailContainer>
+          <PasswordContainer>
+            <Label htmlFor="password-input">Password</Label>
+            <Input
+              borderColor={user.password.color}
+              type="password"
+              id="password-input"
+              value={user.password}
+              onChange={(e) =>
+                setUser({
+                  ...user,
+                  password: e.target.value,
+                })
+              }
+            />
+          </PasswordContainer>
+          <PasswordContainer>
+            <Label htmlFor="confirm-password-input">Confirm Password</Label>
+            <Input
+              borderColor={user.confirmPassword.color}
+              type="password"
+              id="confirm-password-input"
+              value={user.confirmPassword}
+              onChange={(e) =>
+                setUser({
+                  ...user,
+                  confirmPassword: e.target.value,
+                })
+              }
+            />
+          </PasswordContainer>
+        </LoginContainer>
 
-      <ButtonContainer>
-        <Button type="button" value="Submit" onClick={addUser} />
+        <ButtonContainer>
+          <Button type="button" value="Submit" onClick={addUser} />
 
-        <Button cancel type="button" value="Cancel" />
-      </ButtonContainer>
+          <Button cancel type="button" value="Cancel" />
+        </ButtonContainer>
+      </SignUpContainer>
     </Container>
   );
 }
@@ -173,6 +175,11 @@ export default SignUp;
 // styleing the components using STYLED-COMPONENT
 
 const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const SignUpContainer = styled.div`
   width: auto;
   height: auto;
   border: 2px solid #66b5ff;
